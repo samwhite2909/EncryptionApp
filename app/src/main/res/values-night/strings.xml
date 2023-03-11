@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enter_word_or_phrase">Enter word or phrase:</string>
+    <string name="encrypt_button_text">Encrypt</string>
+</resources>
