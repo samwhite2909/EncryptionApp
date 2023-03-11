@@ -2,4 +2,5 @@
 <resources>
     <string name="enter_word_or_phrase">Enter word or phrase:</string>
     <string name="encrypt_button_text">Encrypt</string>
+    <string name="decrypt_button_text">Decrypt</string>
 </resources>

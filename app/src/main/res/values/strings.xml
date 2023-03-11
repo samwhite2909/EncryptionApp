@@ -4,4 +4,5 @@
     <string name="app_name_header_text">Encryption App</string>
     <string name="result_text">Result:</string>
     <string name="encrypt_button_text">Encrypt</string>
+    <string name="decrypt_button_text">Decrypt</string>
 </resources>
