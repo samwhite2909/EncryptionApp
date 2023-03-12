@@ -11,4 +11,14 @@
     <string name="history_description">View your previous activity.</string>
     <string name="settings_title">Settings</string>
     <string name="settings_description">Change your settings for encryption.</string>
+    <string name="encryption_method_text">This encryption will use AES-256-CBC.</string>
+    <string name="enter_text_title">Enter a word or phrase below to see it\'s encrypted value:</string>
+    <string name="change_encryption_method_text">The encryption method used can be changed in settings.</string>
+    <string name="decrypting_text">Decrypting…</string>
+    <string name="encrypting_text">Encrypting…</string>
+    <string name="input_text">Input: </string>
+    <string name="output_text">Output: </string>
+    <string name="date_time_text">"Time: </string>
+    <string name="encryption_method_text_history">"Method: </string>
+    <string name="operation_text">"Operation: </string>
 </resources>

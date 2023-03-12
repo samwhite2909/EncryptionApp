@@ -4,14 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.swhite.encryptionapp.R;
+import com.swhite.encryptionapp.constants.EncryptionMethods;
+import com.swhite.encryptionapp.constants.OperationTypes;
+import com.swhite.encryptionapp.db.EncryptionAppDatabase;
 import com.swhite.encryptionapp.di.EncryptionApplication;
 import com.swhite.encryptionapp.encryption.EncryptionHandler;
+import com.swhite.encryptionapp.models.Operation;
+import com.swhite.encryptionapp.utils.DateTimeUtils;
+
+import org.json.JSONException;
 
 import javax.inject.Inject;
 
@@ -24,7 +31,11 @@ public class EncryptionActivity extends AppCompatActivity {
 
     @Inject
     EncryptionHandler encryptionHandler;
+    @Inject
+    DateTimeUtils dateTimeUtils;
 
+    @Inject
+    EncryptionAppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,34 +47,57 @@ public class EncryptionActivity extends AppCompatActivity {
         encryptButton = findViewById(R.id.encrypt_button);
         decryptButton = findViewById(R.id.decrypt_button);
 
-        EncryptionApplication.get().gpsComponent.inject(this);
+        EncryptionApplication.get().encryptionComponent.inject(this);
 
         encryptButton.setOnClickListener(v -> {
+            Toast.makeText(this, R.string.encrypting_text, Toast.LENGTH_SHORT).show();
             String input  = inputStringEditText.getText().toString();
+            String output = "";
 
             try {
-                input = encryptionHandler.encryptString(input);
-                Log.e("TEST123", input);
+                output = encryptionHandler.encryptString(input);
             } catch (Exception e) {
                 Log.e("TEST123", e.getMessage());
                 throw new RuntimeException(e);
             }
 
-            resultTextView.setText(input);
+            resultTextView.setText(output);
+
+            saveToDatabase(createOperationForHistory(OperationTypes.ENCRYPTION,
+                    input.trim(), output.trim()));
+
         });
 
         decryptButton.setOnClickListener(v -> {
+            Toast.makeText(this, R.string.decrypting_text, Toast.LENGTH_SHORT).show();
 
             String input = resultTextView.getText().toString();
+            String output = "";
 
-            Log.e("TEST123", input);
             try {
-                input = encryptionHandler.decryptString(input);
+                output = encryptionHandler.decryptString(input);
             } catch (Exception e) {
                 Log.e("TEST123", e.getMessage());
                 throw new RuntimeException(e);
             }
-            resultTextView.setText(input);
+            resultTextView.setText(output);
+
+            saveToDatabase(createOperationForHistory(OperationTypes.DECRYPTION,
+                    input.trim(), output.trim()));
         });
+    }
+
+    private Operation createOperationForHistory(String type, String input, String output) {
+        return new Operation(
+                type, EncryptionMethods.AES_CBC_PKCS7,
+                dateTimeUtils.getCurrentDateTime(), input, output);
+    }
+
+    private void saveToDatabase(Operation operation) {
+        try {
+            db.operationsDAO().insertAll(operation);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

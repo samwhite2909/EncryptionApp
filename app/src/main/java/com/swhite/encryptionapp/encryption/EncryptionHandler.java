@@ -73,7 +73,7 @@ public class EncryptionHandler {
             NoSuchAlgorithmException, KeyStoreException, IOException, NoSuchProviderException,
             InvalidAlgorithmParameterException, IllegalBlockSizeException, InvalidKeyException,
             NoSuchPaddingException, BadPaddingException {
-        EncryptionApplication.get().gpsComponent.inject(this);
+        EncryptionApplication.get().encryptionComponent.inject(this);
         AESKey = keyGenerator.generateAESKey();
         IV = keyGenerator.generateIV();
         kp = keyGenerator.getKeys();

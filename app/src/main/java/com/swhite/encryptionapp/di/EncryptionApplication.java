@@ -5,7 +5,7 @@ import android.app.Application;
 //Used for dagger instantiation, allows easy getting of the context anywhere within the application.
 public class EncryptionApplication extends Application {
 
-    public EncryptionComponent gpsComponent;
+    public EncryptionComponent encryptionComponent;
     public static EncryptionApplication instance;
 
     public static EncryptionApplication get() {
@@ -15,7 +15,7 @@ public class EncryptionApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        gpsComponent = DaggerEncryptionComponent.create();
+        encryptionComponent = DaggerEncryptionComponent.create();
         instance = this;
     }
 }
