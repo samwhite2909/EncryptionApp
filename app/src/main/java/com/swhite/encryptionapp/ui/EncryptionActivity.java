@@ -17,6 +17,7 @@ import com.swhite.encryptionapp.di.EncryptionApplication;
 import com.swhite.encryptionapp.encryption.EncryptionHandler;
 import com.swhite.encryptionapp.models.Operation;
 import com.swhite.encryptionapp.utils.DateTimeUtils;
+import com.swhite.encryptionapp.utils.StringValidator;
 
 import org.json.JSONException;
 
@@ -37,6 +38,9 @@ public class EncryptionActivity extends AppCompatActivity {
     @Inject
     EncryptionAppDatabase db;
 
+    @Inject
+    StringValidator stringValidator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,49 +54,64 @@ public class EncryptionActivity extends AppCompatActivity {
         EncryptionApplication.get().encryptionComponent.inject(this);
 
         encryptButton.setOnClickListener(v -> {
-            Toast.makeText(this, R.string.encrypting_text, Toast.LENGTH_SHORT).show();
             String input  = inputStringEditText.getText().toString();
-            String output = "";
 
-            try {
-                output = encryptionHandler.encryptString(input);
-            } catch (Exception e) {
-                Log.e("TEST123", e.getMessage());
-                throw new RuntimeException(e);
+            if (stringValidator.checkStringIsNotEmpty(input)) {
+                Toast.makeText(this, "Please enter a word or phrase...",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.encrypting_text, Toast.LENGTH_SHORT).show();
+
+                String output = "";
+
+                try {
+                    output = encryptionHandler.encryptString(input);
+                } catch (Exception e) {
+                    Log.e("TEST123", e.getMessage());
+                    throw new RuntimeException(e);
+                }
+
+                resultTextView.setText(output);
+
+                saveToDatabase(createOperationForHistory(OperationTypes.ENCRYPTION,
+                        input.trim(), output.trim()));
             }
-
-            resultTextView.setText(output);
-
-            saveToDatabase(createOperationForHistory(OperationTypes.ENCRYPTION,
-                    input.trim(), output.trim()));
-
         });
 
         decryptButton.setOnClickListener(v -> {
-            Toast.makeText(this, R.string.decrypting_text, Toast.LENGTH_SHORT).show();
-
             String input = resultTextView.getText().toString();
-            String output = "";
 
-            try {
-                output = encryptionHandler.decryptString(input);
-            } catch (Exception e) {
-                Log.e("TEST123", e.getMessage());
-                throw new RuntimeException(e);
+            if (stringValidator.checkStringIsNotEmpty(input)) {
+                Toast.makeText(this, "Please enter a word or phrase...",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.decrypting_text, Toast.LENGTH_SHORT).show();
+
+                String output = "";
+
+                try {
+                    output = encryptionHandler.decryptString(input);
+                } catch (Exception e) {
+                    Log.e("TEST123", e.getMessage());
+                    throw new RuntimeException(e);
+                }
+                resultTextView.setText(output);
+
+                saveToDatabase(createOperationForHistory(OperationTypes.DECRYPTION,
+                        input.trim(), output.trim()));
             }
-            resultTextView.setText(output);
 
-            saveToDatabase(createOperationForHistory(OperationTypes.DECRYPTION,
-                    input.trim(), output.trim()));
         });
     }
 
+    //Creates an operation object.
     private Operation createOperationForHistory(String type, String input, String output) {
         return new Operation(
                 type, EncryptionMethods.AES_CBC_PKCS7,
                 dateTimeUtils.getCurrentDateTime(), input, output);
     }
 
+    //Saves the operation to the database.
     private void saveToDatabase(Operation operation) {
         try {
             db.operationsDAO().insertAll(operation);

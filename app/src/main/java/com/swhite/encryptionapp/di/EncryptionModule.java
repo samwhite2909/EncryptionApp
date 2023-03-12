@@ -9,6 +9,7 @@ import com.swhite.encryptionapp.encryption.EncryptionHandler;
 import com.swhite.encryptionapp.encryption.KeyGenerator;
 import com.swhite.encryptionapp.encryption.RSA;
 import com.swhite.encryptionapp.utils.DateTimeUtils;
+import com.swhite.encryptionapp.utils.StringValidator;
 
 import javax.inject.Singleton;
 
@@ -57,6 +58,12 @@ public class EncryptionModule {
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
+    }
+
+    @Singleton
+    @Provides
+    StringValidator providesStringValidator() {
+        return new StringValidator();
     }
 
 }

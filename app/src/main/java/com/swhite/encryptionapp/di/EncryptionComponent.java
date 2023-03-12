@@ -5,6 +5,7 @@ import com.swhite.encryptionapp.encryption.EncryptionHandler;
 import com.swhite.encryptionapp.ui.EncryptionActivity;
 import com.swhite.encryptionapp.ui.HistoryActivity;
 import com.swhite.encryptionapp.utils.DateTimeUtils;
+import com.swhite.encryptionapp.utils.StringValidator;
 
 import javax.inject.Singleton;
 
@@ -24,4 +25,6 @@ public interface EncryptionComponent {
     void inject(OperationsAdapter operationsAdapter);
 
     void inject(HistoryActivity historyActivity);
+
+    void inject(StringValidator stringValidator);
 }
