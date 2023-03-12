@@ -1,7 +1,7 @@
 package com.swhite.encryptionapp.di;
 
 import com.swhite.encryptionapp.encryption.EncryptionHandler;
-import com.swhite.encryptionapp.ui.MainActivity;
+import com.swhite.encryptionapp.ui.EncryptionActivity;
 
 import javax.inject.Singleton;
 
@@ -12,7 +12,7 @@ import dagger.Component;
 @Component(modules = EncryptionModule.class)
 public interface EncryptionComponent {
 
-    void inject(MainActivity mainActivity);
-
     void inject (EncryptionHandler encryptionHandler);
+
+    void inject(EncryptionActivity encryptionActivity);
 }

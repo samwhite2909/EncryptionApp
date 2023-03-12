@@ -5,4 +5,10 @@
     <string name="result_text">Result:</string>
     <string name="encrypt_button_text">Encrypt</string>
     <string name="decrypt_button_text">Decrypt</string>
+    <string name="new_encryption_title">Encryption</string>
+    <string name="new_encryption_description">Encrypt and decrypt new words or phrases.</string>
+    <string name="history_title">History</string>
+    <string name="history_description">View your previous activity.</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_description">Change your settings for encryption.</string>
 </resources>
